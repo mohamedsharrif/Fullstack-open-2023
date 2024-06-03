@@ -1,8 +1,6 @@
-# React + Vite
+Accessing the Deployed Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The Frontend of my application has been successfully deployed to Fly.io. You can access it using the following URL:
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+https://myfrontend-phonebook.fly.dev/
