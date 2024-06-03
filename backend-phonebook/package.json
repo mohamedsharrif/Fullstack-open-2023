@@ -16,5 +16,8 @@
     "express": "^4.19.2",
     "morgan": "^1.10.0",
     "nodemon": "^3.1.2"
+  },
+  "devDependencies": {
+    "@flydotio/dockerfile": "^0.5.7"
   }
 }

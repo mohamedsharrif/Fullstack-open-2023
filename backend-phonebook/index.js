@@ -91,7 +91,7 @@ app.post("/api/persons", (req, res) => {
   res.json(person);
 });
 
-const port = process.env.PORT || 3002;
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server is listening port ${port}`);
 });
