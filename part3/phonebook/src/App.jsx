@@ -4,7 +4,7 @@ import PersonForm from "./PersonForm";
 import Persons from "./Persons";
 import axios from "axios";
 
-const baseUrl = "http://localhost:3002/api/persons";
+const baseUrl = "http://localhost:3000/api/persons";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
