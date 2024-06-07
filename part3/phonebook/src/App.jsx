@@ -60,7 +60,7 @@ const App = () => {
     const confirmDelete = window.confirm(`Delete ${name}?`);
     if (confirmDelete) {
       handleDelete(id);
-      setNotification(`${name}'s number was updated successfully.`); // Corrected newName to name
+      setNotification(`${name}'s number was updated successfully.`); 
       setTimeout(() => {
         setNotification(null);
       }, 3000);
