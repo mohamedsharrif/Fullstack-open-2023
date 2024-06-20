@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import Filter from "./Filter";
 import PersonForm from "./PersonForm";
@@ -12,6 +13,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
   const [notifications, setNotification] = useState(null);
+  
 
   useEffect(() => {
     axios
@@ -21,6 +23,7 @@ const App = () => {
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
+         setErrorMessage('Failed to fetch data. Please try again later.');
       });
   }, []);
 
@@ -34,21 +37,26 @@ const App = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const isExists =
-      persons.filter((person) => person.name === newName).length > 0;
-    isExists
-      ? alert(`${newName} is already added to phonebook`)
-      : setPersons([
-          ...persons,
-          { name: newName, number: newNumber, id: persons.length + 1 },
-        ]);
 
-    setNotification(`${newName} was added to the phonebook.`);
-    setTimeout(() => {
-      setNotification(null);
-    }, 3000);
-    setNewName("");
-    setNewNumber("");
+    const isExists = persons.some((person) => person.name === newName);
+
+    if (isExists) {
+      alert(`${newName} is already added to the phonebook`);
+      return;
+    }
+
+    const newPerson = { name: newName, number: newNumber };
+
+    axios.post(baseUrl, newPerson)
+      .then(response => {
+        setPersons([...persons, response.data]);
+        setNewName("");
+        setNewNumber("");
+      })
+      .catch(error => {
+        console.error('Error adding person:', error);
+        setErrorMessage('Failed to add person. Please try again later.'); 
+      });
   };
 
   const handleDelete = (id) => {
@@ -85,3 +93,4 @@ const App = () => {
 };
 
 export default App;
+
