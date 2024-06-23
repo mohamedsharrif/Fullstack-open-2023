@@ -1,10 +1,10 @@
 import React from "react";
 
-const Persons = ({ persons, onDeleteClick }) => {
+const Persons = ({ filteredPersons, onDeleteClick }) => {
   
   return (
     <>
-      {persons.map((person) => (
+      {filteredPersons.map((person) => (
         <div key={person.id}>
           <p>
             {person.name} {person.number}

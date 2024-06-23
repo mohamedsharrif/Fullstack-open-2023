@@ -42,10 +42,19 @@ app.post("/api/persons", (req, res) => {
     .then((savedPerson) => {
       res.json(savedPerson);
     })
-
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({ error: "Failed to save person" });
+    });
 });
 
-
+app.delete('/api/persons/:id', (req, res, next) => {
+  Persons.findByIdAndDelete(req.params.id)
+    .then(result => {
+      res.status(204).end()
+    })
+    .catch(error => next(error))
+})
 
 
 

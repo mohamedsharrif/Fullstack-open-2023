@@ -13,6 +13,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
   const [notifications, setNotification] = useState(null);
+  const [filter, setFilter] = useState("");
   
 
   useEffect(() => {
@@ -28,12 +29,12 @@ const App = () => {
   }, []);
 
   const handleFilter = (e) => {
-    const filteredPersons = persons.filter((person) =>
-      person.name.toLowerCase().startsWith(e.target.value.toLowerCase())
-    );
-
-    setPersons(filteredPersons);
+    setFilter(e.target.value);
   };
+
+  const filteredPersons = persons.filter((person) =>
+    person.name.toLowerCase().includes(filter.toLowerCase())
+  );
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -60,25 +61,39 @@ const App = () => {
   };
 
   const handleDelete = (id) => {
-    const updatedPersons = persons.filter((person) => person.id !== id);
-    setPersons(updatedPersons);
+    axios
+      .delete(`${baseUrl}/${id}`)
+      .then(() => {
+        const updatedPersons = persons.filter((person) => person.id !== id);
+        setPersons(updatedPersons);
+        setNotification(`Deleted successfully.`);
+        setTimeout(() => {
+          setNotification(null);
+        }, 3000);
+      })
+      .catch((error) => {
+        console.error("Error deleting person:", error);
+        setErrorMessage("Failed to delete person. Please try again later.");
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 3000);
+      });
   };
+  
 
   const onDeleteButtonClick = (id, name) => {
     const confirmDelete = window.confirm(`Delete ${name}?`);
     if (confirmDelete) {
       handleDelete(id);
-      setNotification(`${name}'s number was updated successfully.`); 
-      setTimeout(() => {
-        setNotification(null);
-      }, 3000);
     }
   };
+  
 
   return (
     <div>
       <h2>Phonebook</h2>
       {notifications && <div className="notification">{notifications}</div>}
+      {errorMessage && <div className="error">{errorMessage}</div>}
       <Filter handleFilter={handleFilter} />
       <h2>add a new</h2>
       <PersonForm
@@ -87,7 +102,7 @@ const App = () => {
         setNewNumber={setNewNumber}
       />
       <h2>Numbers</h2>
-      <Persons persons={persons} onDeleteClick={onDeleteButtonClick} />
+      <Persons filteredPersons={filteredPersons} onDeleteClick={onDeleteButtonClick} />
     </div>
   );
 };
