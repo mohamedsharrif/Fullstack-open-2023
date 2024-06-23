@@ -36,29 +36,60 @@ const App = () => {
     person.name.toLowerCase().includes(filter.toLowerCase())
   );
 
-  const handleSubmit = (e) => {
+ const handleSubmit = (e) => {
     e.preventDefault();
 
-    const isExists = persons.some((person) => person.name === newName);
+    const existingPerson = persons.find((person) => person.name === newName);
 
-    if (isExists) {
-      alert(`${newName} is already added to the phonebook`);
-      return;
+    if (existingPerson) {
+      const confirmUpdate = window.confirm(
+        `${newName} is already in the phonebook. Replace the old number with a new one?`
+      );
+
+      if (confirmUpdate) {
+        axios
+          .put(`${baseUrl}/${existingPerson.id}`, { number: newNumber })
+          .then((response) => {
+            setPersons(
+              persons.map((person) =>
+                person.id !== existingPerson.id ? person : response.data
+              )
+            );
+            setNewName("");
+            setNewNumber("");
+            setNotification(`Updated ${newName}'s number`);
+            setTimeout(() => {
+              setNotification(null);
+            }, 3000);
+          })
+          .catch((error) => {
+            console.error("Error updating person:", error);
+            setErrorMessage("Failed to update person. Please try again later.");
+            setTimeout(() => {
+              setErrorMessage(null);
+            }, 3000);
+          });
+      }
+    } else {
+      const newPerson = { name: newName, number: newNumber };
+
+      axios
+        .post(baseUrl, newPerson)
+        .then((response) => {
+          setPersons([...persons, response.data]);
+          setNewName("");
+          setNewNumber("");
+        })
+        .catch((error) => {
+          console.error("Error adding person:", error);
+          setErrorMessage("Failed to add person. Please try again later.");
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 3000);
+        });
     }
-
-    const newPerson = { name: newName, number: newNumber };
-
-    axios.post(baseUrl, newPerson)
-      .then(response => {
-        setPersons([...persons, response.data]);
-        setNewName("");
-        setNewNumber("");
-      })
-      .catch(error => {
-        console.error('Error adding person:', error);
-        setErrorMessage('Failed to add person. Please try again later.'); 
-      });
   };
+
 
   const handleDelete = (id) => {
     axios

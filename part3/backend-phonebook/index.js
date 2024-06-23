@@ -4,7 +4,9 @@ const cors = require("cors");
 const app = express();
 require("dotenv").config();
 
+
 const Persons = require("./models/persons");
+
 
 app.use(express.json());
 app.use(cors());
@@ -55,6 +57,31 @@ app.delete('/api/persons/:id', (req, res, next) => {
     })
     .catch(error => next(error))
 })
+
+app.put('/api/persons/:id', (req, res, next) => {
+  const { number } = req.body;
+
+  if (!number) {
+    return res.status(400).json({ error: 'number missing' });
+  }
+
+  Person.findByIdAndUpdate(
+    req.params.id,
+    { number },
+    { new: true, runValidators: true, context: 'query' }
+  )
+    .then(updatedPerson => {
+      if (updatedPerson) {
+        res.json(updatedPerson);
+      } else {
+        res.status(404).json({ error: 'Person not found' });
+      }
+    })
+    .catch(error => next(error));
+});
+
+
+
 
 const unknownEndpoint = (req, res) => {
   res.status(404).send({ error: 'unknown endpoint' });
