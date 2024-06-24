@@ -44,10 +44,7 @@ app.post("/api/persons", (req, res) => {
     .then((savedPerson) => {
       res.json(savedPerson);
     })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).json({ error: "Failed to save person" });
-    });
+    .catch((err) => next(err));
 });
 
 app.delete('/api/persons/:id', (req, res, next) => {
@@ -65,7 +62,7 @@ app.put('/api/persons/:id', (req, res, next) => {
     return res.status(400).json({ error: 'number missing' });
   }
 
-  Person.findByIdAndUpdate(
+  Persons.findByIdAndUpdate(
     req.params.id,
     { number },
     { new: true, runValidators: true, context: 'query' }

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import Filter from "./Filter";
 import PersonForm from "./PersonForm";
@@ -14,7 +13,6 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const [notifications, setNotification] = useState(null);
   const [filter, setFilter] = useState("");
-  
 
   useEffect(() => {
     axios
@@ -24,7 +22,7 @@ const App = () => {
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
-         setErrorMessage('Failed to fetch data. Please try again later.');
+        setErrorMessage("Failed to fetch data. Please try again later.");
       });
   }, []);
 
@@ -36,7 +34,7 @@ const App = () => {
     person.name.toLowerCase().includes(filter.toLowerCase())
   );
 
- const handleSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     const existingPerson = persons.find((person) => person.name === newName);
@@ -64,7 +62,13 @@ const App = () => {
           })
           .catch((error) => {
             console.error("Error updating person:", error);
-            setErrorMessage("Failed to update person. Please try again later.");
+            if (error.response && error.response.data.error) {
+              setErrorMessage(error.response.data.error);
+            } else {
+              setErrorMessage(
+                "Failed to update person. Please try again later."
+              );
+            }
             setTimeout(() => {
               setErrorMessage(null);
             }, 3000);
@@ -82,14 +86,17 @@ const App = () => {
         })
         .catch((error) => {
           console.error("Error adding person:", error);
-          setErrorMessage("Failed to add person. Please try again later.");
+          if (error.response && error.response.data.error) {
+            setErrorMessage(error.response.data.error);
+          } else {
+            setErrorMessage("Failed to add person. Please try again later.");
+          }
           setTimeout(() => {
             setErrorMessage(null);
           }, 3000);
         });
     }
   };
-
 
   const handleDelete = (id) => {
     axios
@@ -110,7 +117,6 @@ const App = () => {
         }, 3000);
       });
   };
-  
 
   const onDeleteButtonClick = (id, name) => {
     const confirmDelete = window.confirm(`Delete ${name}?`);
@@ -118,13 +124,13 @@ const App = () => {
       handleDelete(id);
     }
   };
-  
 
   return (
     <div>
       <h2>Phonebook</h2>
       {notifications && <div className="notification">{notifications}</div>}
       {errorMessage && <div className="error">{errorMessage}</div>}
+
       <Filter handleFilter={handleFilter} />
       <h2>add a new</h2>
       <PersonForm
@@ -133,10 +139,12 @@ const App = () => {
         setNewNumber={setNewNumber}
       />
       <h2>Numbers</h2>
-      <Persons filteredPersons={filteredPersons} onDeleteClick={onDeleteButtonClick} />
+      <Persons
+        filteredPersons={filteredPersons}
+        onDeleteClick={onDeleteButtonClick}
+      />
     </div>
   );
 };
 
 export default App;
-
