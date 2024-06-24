@@ -130,7 +130,6 @@ const App = () => {
       <h2>Phonebook</h2>
       {notifications && <div className="notification">{notifications}</div>}
       {errorMessage && <div className="error">{errorMessage}</div>}
-
       <Filter handleFilter={handleFilter} />
       <h2>add a new</h2>
       <PersonForm
