@@ -5,16 +5,21 @@ mongoose.set("strictQuery", false);
 
 const url = process.env.MONGODB_URI;
 
+if (!url) {
+  console.error("MongoDB URI not set in environment variables.");
+  process.exit(1);
+}
+
 console.log("connecting to", url);
 
-mongoose
-  .connect(url)
-  .then((result) => {
+(async () => {
+  try {
+    await mongoose.connect(url);
     console.log("connected to MongoDB");
-  })
-  .catch((error) => {
-    console.log("error connecting to MongoDB:", error.message);
-  });
+  } catch (error) {
+    console.error("error connecting to MongoDB:", error.message);
+  }
+})();
 
 const phoneValidator = {
   validator: function (v) {

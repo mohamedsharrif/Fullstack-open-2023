@@ -4,7 +4,7 @@ import PersonForm from "./PersonForm";
 import Persons from "./Persons";
 import axios from "axios";
 
-const baseUrl = "http://localhost:3000/api/persons";
+const baseUrl = process.env.REACT_APP_API_URL || "http://localhost:3001/api/persons";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -15,6 +15,7 @@ const App = () => {
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
+    console.log("API URL:", baseUrl);
     axios
       .get(baseUrl)
       .then((response) => {

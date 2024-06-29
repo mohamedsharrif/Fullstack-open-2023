@@ -1,14 +1,19 @@
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
+const path = require("path");
 const app = express();
 require("dotenv").config();
-
 const Persons = require("./models/persons");
 
 app.use(express.json());
-app.use(cors());
+
+app.use(cors({
+  origin: 'https://mybackend-phonebook.fly.dev',
+}));
+
 morgan.token("body", (req) => JSON.stringify(req.body));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :body")
@@ -47,7 +52,7 @@ app.post("/api/persons", (req, res, next) => {
 
 app.delete("/api/persons/:id", (req, res, next) => {
   Persons.findByIdAndDelete(req.params.id)
-    .then((result) => {
+    .then(() => {
       res.status(204).end();
     })
     .catch((error) => next(error));
@@ -92,7 +97,11 @@ const errorHandler = (error, req, res, next) => {
 };
 app.use(errorHandler);
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Server is listening port ${port}`);
+const port = process.env.PORT || 3001;
+app.listen(port, "0.0.0.0", () => {
+  console.log(`Server running on port ${port}`);
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
