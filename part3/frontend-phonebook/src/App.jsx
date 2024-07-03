@@ -4,7 +4,8 @@ import PersonForm from "./PersonForm";
 import Persons from "./Persons";
 import axios from "axios";
 
-const baseUrl = process.env.REACT_APP_API_URL || "http://localhost:3001/api/persons";
+const baseUrl = import.meta.env.VITE_APP_API_URL;
+console.log("Base URL:", baseUrl);
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -15,9 +16,8 @@ const App = () => {
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
-    console.log("API URL:", baseUrl);
     axios
-      .get(baseUrl)
+      .get(`${baseUrl}/persons`)
       .then((response) => {
         setPersons(response.data);
       })
@@ -47,7 +47,7 @@ const App = () => {
 
       if (confirmUpdate) {
         axios
-          .put(`${baseUrl}/${existingPerson.id}`, { number: newNumber })
+          .put(`${baseUrl}/persons/${existingPerson.id}`, { number: newNumber })
           .then((response) => {
             setPersons(
               persons.map((person) =>
@@ -79,7 +79,7 @@ const App = () => {
       const newPerson = { name: newName, number: newNumber };
 
       axios
-        .post(baseUrl, newPerson)
+        .post(`${baseUrl}/persons`, newPerson)
         .then((response) => {
           setPersons([...persons, response.data]);
           setNewName("");
@@ -101,7 +101,7 @@ const App = () => {
 
   const handleDelete = (id) => {
     axios
-      .delete(`${baseUrl}/${id}`)
+      .delete(`${baseUrl}/persons/${id}`)
       .then(() => {
         const updatedPersons = persons.filter((person) => person.id !== id);
         setPersons(updatedPersons);

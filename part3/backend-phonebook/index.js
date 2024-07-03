@@ -12,6 +12,7 @@ app.use(cors({
   origin: 'https://mybackend-phonebook.fly.dev',
 }));
 
+
 morgan.token("body", (req) => JSON.stringify(req.body));
 app.use(express.static(path.join(__dirname, "public")));
 

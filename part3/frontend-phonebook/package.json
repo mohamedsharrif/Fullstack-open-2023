@@ -8,10 +8,11 @@
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "copy-build": "vite build && cp -r dist/* ../backend-phonebook/public/"
+    "build-and-copy": "REACT_APP_API_URL=https://mybackend-phonebook.fly.dev/api vite build && cp -r dist/* ../backend-phonebook/public/"
   },
   "dependencies": {
     "axios": "^1.7.2",
+    "dotenv": "^16.4.5",
     "json-server": "^1.0.0-alpha.23",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

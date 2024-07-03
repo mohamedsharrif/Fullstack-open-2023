@@ -1,6 +1,23 @@
-# Node.js
+# Node.js modules
 node_modules/
+
+# Environment variables
 .env
+
+# Docker files
 Dockerfile
-fly.toml
 .dockerignore
+
+# Fly.io configuration file
+fly.toml
+
+# Build directories
+dist/
+
+
+# Log files
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
