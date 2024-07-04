@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon index.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "lint": "eslint ."
   },
   "keywords": [],
   "author": "Sharif",
@@ -22,6 +23,10 @@
     "pm2": "^5.4.1"
   },
   "devDependencies": {
-    "@flydotio/dockerfile": "^0.5.7"
+    "@eslint/js": "^9.6.0",
+    "@flydotio/dockerfile": "^0.5.7",
+    "@stylistic/eslint-plugin-js": "^2.3.0",
+    "eslint": "^9.6.0",
+    "globals": "^15.8.0"
   }
 }
